@@ -1,5 +1,6 @@
 #this is an mini RPG
 #How do I make the game restart from here?
+from adventurelib import *
 import sys
 def test(did_pass):
     """  Print the result of a test.  """

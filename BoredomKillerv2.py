@@ -61,12 +61,23 @@ You are in a jungle. You find a knife and monsters.""")
 another_magic_forest = valley.north = Room("""
 You are in a enchanted forest where magic grows wildly.""")
 
+portal_room = junglebranch.south = Room("""
+You enter a room that has a portal.""")
+
+the_ether = portal_room.south = Room("""
+After stepping into the portal you enter a realm known as the Ether""")
+
 mallet = Item('rusty mallet', 'mallet')
 valley.items = Bag({mallet, })
 basketball = Item("basketball", "ball")
 playground.items = Bag({basketball, })
 key = Item('golden key', 'key')
 gasmask = Item('gasmask', 'key')
+sword = Item("sword", "weapons")
+Axe = Item("axe", "weapon")
+knife = Item("shinny knife", "knife")
+junglebranch.items = Bag({knife})
+
 
 # monsterroom.items = Bag({key})
 inventory = Bag()
@@ -82,6 +93,12 @@ def go(direction):
     if room:
         current_room = room
         say('You go %s.' % direction)
+        if room == portal_room:
+            if "knife" in inventory:
+                say("You have the knife you may enter")
+            else:
+                say("You must go back and get the knife")
+                go("north")
         look()
         if room == magic_forest:
             set_context('magic_aura')
@@ -112,6 +129,9 @@ def go(direction):
             else:
                 say("you are killed by the guard in magic forest since you refuse to give a key. you such a trash")
                 current_room = starting_room
+        elif room == junglebranch:
+            say("Do you fight the monster")
+
 
 
 @when('take ITEM')
@@ -156,7 +176,21 @@ def cast(magic):
         say("Which magic you would like to spell?")
     elif magic == "invisible":
         say("you are invisible, noone can see you.")
+@when("fight")
+def fight():
+    global current_room
+    rng = random.Random()
+    coin = rng.randrange(1, 3)
+    if coin == 1 and "shinny knife" in inventory:
+        say("You defeated the monster, he give you 100 gold and can now move on")
+        player.gold = player.gold + 100
+    else:
+        say("You are dead and are sent back to the start. Remember to take the knife.")
+        current_room.exit("north")
 
+@when("gold")
+def gold():
+    say("You have "+str(player.gold)+" gold")
 
 look()
 start()

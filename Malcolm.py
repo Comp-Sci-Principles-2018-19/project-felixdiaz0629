@@ -112,6 +112,8 @@ def fight():
         say("You are dead and are sent back to the start. Remember to take the knife.")
         current_room.exit("north")
 
-
+@when("gold")
+def gold():
+    say("You have",player.gold)
 look()
 start()
