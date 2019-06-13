@@ -186,7 +186,7 @@ def fight():
         player.gold = player.gold + 100
     else:
         say("You are dead and are sent back to the start. Remember to take the knife.")
-        current_room.exit("north")
+        go("north")
 
 @when("gold")
 def gold():
